@@ -1,40 +1,88 @@
-def solve_sudoku(board):
-    empty_cell = find_empty_cell(board)
-    if not empty_cell:
-        return True
-    row, col = empty_cell
-    for num in range(1, 10):
-        if is_valid(board, row, col, num):
-            board[row][col] = num
-            if solve_sudoku(board):
-                return True
-            board[row][col] = 0
-    return False
+#include <iostream>
+#include <math.h>
+using namespace std;
 
-def find_empty_cell(board):
-    for i in range(9):
-        for j in range(9):
-            if board[i][j] == 0:
-                return (i, j)
-    return None
+//To print the board
+void PrintB(int B[][9], int n)
+{
+    for(int i=0; i<n; i++)
+    {
+        for(int j=0; j<n;j++)
+        {
+            cout<<B[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+    cout<<endl;
+}
 
-def is_valid(board, row, col, num):
-    for i in range(9):
-        if board[row][i] == num or board[i][col] == num:
-            return False
-    start_row, start_col = 3 * (row // 3), 3 * (col // 3)
-    for i in range(3):
-        for j in range(3):
-            if board[start_row + i][start_col + j] == num:
-                return False
-    return True
+bool isValid(int B[][9], int x, int y, int n)
+{
+    //Row
+    for(int i = 0; i<n; i++)
+        if(B[x][i] == num )
+            return false;
+    
+    //Coloumn
+    for(int i = 0; i<n; i++)
+        if(B[i][y] == num )
+            return false;
 
-def print_board(board):
-    for row in board:
-        print(" ".join(map(str, row)))
+    //SubGrid
+    int rn = sqrt(n);
+    int sx = x-x%rn;
+    int sy = y-y%rn;
 
-if solve_sudoku(example_board):
-    print("Sudoku puzzle solved:")
-    print_board(example_board)
-else:
-    print("No solution exists")
+    for(int i=sx;i<sx+rn; i++)
+    {
+        for(int j = sy; j<sy+rn; j++)
+        {
+            if(B[i][j] == num)
+            return false;
+        }
+    }
+    return true;
+}   
+
+void SudokuSolver(int B[][9], int x, int y, int n)
+{
+    if(x==n)
+        PrintB(B,n);
+        return true;
+    
+    // if we move out of the bored.
+    if(y==n)
+    {
+        return SudokuSolver(B,x+1,0,n);
+    }
+    //Its filled already
+    if(B[x][y]!=0)
+    {
+        return SudokuSolver(B,x,y+1,n):
+    }
+    //Filling correct number
+    for(int num=1; num<=9; num++)
+    {
+        if(isValid(B,x,y,num))
+            B[x][y] = num;
+            SudokuSolver(B,i,j+1,n);
+            bool Ans = SudokuSolver(B,x,y+1,n);
+            if (Ans)
+            {
+                return true;
+            }
+            
+            B[x][y]=0;
+    }
+    return false;
+}
+
+int main()
+{
+    int n=9;
+    //enter your sudoku here
+    int B[9][9] = {};
+    SudokuSolver(B,0,0,n);
+    return 0;
+
+}
