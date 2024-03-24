@@ -1,0 +1,59 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+string toLowercase(const string &input) 
+{
+    string result = input;
+    transform(result.begin(), result.end(), result.begin(), ::tolower);
+    return result;
+}
+
+string getResponse(const string &input) 
+{
+    string response;
+    
+    string lowercaseInput = toLowercase(input);
+
+
+    if (lowercaseInput.find("hello") != string::npos || lowercaseInput.find("hi") != string::npos) 
+    {
+        response = "Hello! How can I assist you today?";
+    } else if (lowercaseInput.find("how are you") != string::npos) 
+    {
+        response = "I'm just a computer program, so I don't have feelings, but thank you for asking!";
+    } else if (lowercaseInput.find("bye") != string::npos || lowercaseInput.find("exit") != string::npos) 
+    {
+        response = "Goodbye! Have a great day!";
+    } else 
+    {
+        response = "I'm sorry, I didn't understand that. Could you please rephrase?";
+    }
+
+    return response;
+}
+
+int main() 
+{
+    cout << "Welcome to AI Chatbot\n";
+    cout << "You can start the conversation. Enter 'exit' to end the chat.\n";
+
+    string userInput;
+
+    while (true) {
+        cout << "\nUser: ";
+        getline(cin, userInput);
+
+        if (toLowercase(userInput) == "exit") {
+            cout << "Chatbot: Goodbye! Have a great day!\n";
+            break;
+        }
+
+        string response = getResponse(userInput);
+        cout << "Chatbot: " << response << "\n";
+    }
+
+    return 0;
+}
